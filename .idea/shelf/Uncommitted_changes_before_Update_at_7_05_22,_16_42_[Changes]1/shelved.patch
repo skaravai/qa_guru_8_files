@@ -1,0 +1,46 @@
+Index: .idea/git_toolbox_prj.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/git_toolbox_prj.xml b/.idea/git_toolbox_prj.xml
+new file mode 100644
+--- /dev/null	
++++ b/.idea/git_toolbox_prj.xml	
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="GitToolBoxProjectSettings">
++    <option name="commitMessageIssueKeyValidationOverride">
++      <BoolValueOverride>
++        <option name="enabled" value="true" />
++      </BoolValueOverride>
++    </option>
++    <option name="commitMessageValidationEnabledOverride">
++      <BoolValueOverride>
++        <option name="enabled" value="true" />
++      </BoolValueOverride>
++    </option>
++  </component>
++</project>
+\ No newline at end of file
+Index: src/test/java/guru/qa/SelenideDownloadTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package guru.qa;\n\nimport com.codeborne.pdftest.PDF;\nimport com.codeborne.pdftest.matchers.ContainsExactText;\nimport com.codeborne.selenide.Selenide;\nimport com.codeborne.xlstest.XLS;\nimport com.opencsv.CSVReader;\nimport org.junit.jupiter.api.Assertions;\nimport org.junit.jupiter.api.Test;\n\nimport java.io.*;\nimport java.nio.charset.StandardCharsets;\nimport java.util.List;\nimport java.util.zip.ZipEntry;\nimport java.util.zip.ZipInputStream;\n\nimport static com.codeborne.selenide.Selenide.$;\nimport static org.hamcrest.MatcherAssert.assertThat;\n\npublic class SelenideDownloadTest {\n\n    ClassLoader cl = SelenideDownloadTest.class.getClassLoader();\n\n    @Test\n    void downloadTest() throws Exception {\n\n        Selenide.open(\"https://github.com/junit-team/junit5/blob/main/README.md\");\n        File textFile = $(\"#raw-url\").download();\n        try (InputStream is = new FileInputStream(textFile)) {\n            byte[] fileContent = is.readAllBytes();\n            String strContent = new String(fileContent, StandardCharsets.UTF_8);\n            org.assertj.core.api.Assertions.assertThat(strContent).contains(\"JUnit 5\");\n        }\n\n    }\n\n    @Test\n    void pdfParsingText() throws Exception {\n        InputStream stream = cl.getResourceAsStream(\"pdf/junit-user-guide-5.8.2.pdf\");\n        PDF pdf = new PDF(stream);\n        Assertions.assertEquals(166, pdf.numberOfPages);\n        assertThat(pdf, new ContainsExactText(\"123\"));\n    }\n\n    @Test\n    void xlsParsingText() throws Exception {\n        InputStream stream = cl.getResourceAsStream(\"xls/sample-xlsx-file.xlsx\");\n        XLS xls = new XLS(stream);\n        String stringCellValue = xls.excel.getSheetAt(0).getRow(3).getCell(1).getStringCellValue();\n        org.assertj.core.api.Assertions.assertThat(stringCellValue).contains(\"Philip\");\n    }\n\n    @Test\n    void csvParsingText() throws Exception {\n        try (\n                InputStream stream = cl.getResourceAsStream(\"csv/teachers.csv\");\n                CSVReader reader = new CSVReader(new InputStreamReader(stream, StandardCharsets.UTF_8))) {\n\n            List<String[]> content = reader.readAll();\n            org.assertj.core.api.Assertions.assertThat(content).contains(\n                    new String[]{\"Name\", \"Surname\"},\n                    new String[]{\"Dmitrii\", \"Tuchs\"},\n                    new String[]{\"Artem\", \"Eroshenko\"}\n            );\n\n        }\n    }\n\n    @Test\n    void zipParsingTest() throws Exception {\n        ZipInputStream is = new ZipInputStream(cl.getResourceAsStream(\"zip/zip-file.zip\"));\n        ZipEntry entry;\n        while ((entry = is.getNextEntry()) != null) {\n            org.assertj.core.api.Assertions.assertThat(entry.getName()).isEqualTo(\"sample.txt\");\n        }\n    }\n\n}\n\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/guru/qa/SelenideDownloadTest.java b/src/test/java/guru/qa/SelenideDownloadTest.java
+--- a/src/test/java/guru/qa/SelenideDownloadTest.java	
++++ b/src/test/java/guru/qa/SelenideDownloadTest.java	
+@@ -73,8 +73,8 @@
+         while ((entry = is.getNextEntry()) != null) {
+             org.assertj.core.api.Assertions.assertThat(entry.getName()).isEqualTo("sample.txt");
+         }
+-    }
+ 
++    }
+ }
+ 
+ 
