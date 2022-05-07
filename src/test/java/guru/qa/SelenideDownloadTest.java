@@ -73,8 +73,8 @@ public class SelenideDownloadTest {
         while ((entry = is.getNextEntry()) != null) {
             org.assertj.core.api.Assertions.assertThat(entry.getName()).isEqualTo("sample.txt");
         }
-    }
 
+    }
 }
 
 
